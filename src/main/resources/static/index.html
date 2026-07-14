@@ -35,9 +35,11 @@
       <li><a href="#my-courses">My Enrollments</a></li>
     </ul>
     <div class="nav-account">
-      <span id="navStudentName"></span>
+      <button class="nav-profile" id="navProfile" onclick="openProfileModal()">
+        <span class="nav-profile-avatar">👤</span>
+        <span id="navStudentName"></span>
+      </button>
       <button class="nav-cta" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Browse Courses</button>
-      <button class="nav-switch" id="navSwitch" onclick="switchAccount()">Switch</button>
     </div>
   </nav>
 
@@ -120,6 +122,23 @@
   </footer>
 
   <div class="toast" id="toast"></div>
+
+  <div class="modal-overlay" id="profileModalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeProfileModal()">&times;</button>
+      <h3>My profile</h3>
+      <span class="modal-course">Your registration details</span>
+      <div class="profile-details">
+        <div class="profile-row"><span>Full name</span><strong id="profileName"></strong></div>
+        <div class="profile-row"><span>Email</span><strong id="profileEmail"></strong></div>
+        <div class="profile-row"><span>Courses enrolled</span><strong id="profileEnrollCount"></strong></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel" onclick="closeProfileModal()">Close</button>
+        <button type="button" class="modal-submit" onclick="switchAccount()">Switch account</button>
+      </div>
+    </div>
+  </div>
 
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">

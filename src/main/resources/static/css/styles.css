@@ -150,32 +150,63 @@ body.gated .gate-overlay {
   gap: 14px;
 }
 
-#navStudentName {
+.nav-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(250, 247, 239, 0.12);
+  border: 1px solid rgba(250, 247, 239, 0.3);
   color: var(--cream-100);
-  font-size: 0.85rem;
-  font-weight: 600;
-  opacity: 0.85;
-}
-
-.nav-switch {
-  background: transparent;
-  border: 1px solid rgba(250, 247, 239, 0.45);
-  color: var(--cream-100);
-  padding: 9px 16px;
+  padding: 7px 14px 7px 10px;
   border-radius: 999px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.82rem;
   cursor: pointer;
 }
 
-.nav-switch:hover {
+.nav-profile:hover {
   border-color: var(--cream-50);
+  background: rgba(250, 247, 239, 0.2);
+}
+
+.nav-profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--sun-400);
+  font-size: 0.75rem;
 }
 
 .modal-student {
   font-size: 0.88rem;
   color: #5a5a4e;
   margin-bottom: 22px;
+}
+
+.profile-details {
+  margin: 20px 0 24px;
+  border-top: 1px solid #ece7d8;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #ece7d8;
+  font-size: 0.92rem;
+}
+
+.profile-row span {
+  color: #7a7a6c;
+}
+
+.profile-row strong {
+  color: var(--ink-700);
+  font-weight: 700;
 }
 
 /* Nav */

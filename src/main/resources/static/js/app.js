@@ -6,7 +6,9 @@ const grid = document.getElementById("courseGrid");
 const toast = document.getElementById("toast");
 const modalOverlay = document.getElementById("modalOverlay");
 const modalCourseTitle = document.getElementById("modalCourseTitle");
+const profileModalOverlay = document.getElementById("profileModalOverlay");
 const STORAGE_KEY = "wildroot_student";
+let lastEnrollmentCount = 0;
 
 window.addEventListener("scroll", () => {
   document.getElementById("siteNav").classList.toggle("scrolled", window.scrollY > 40);
@@ -38,7 +40,7 @@ function storeStudent(student) {
 
 function unlockSite() {
   document.body.classList.remove("gated");
-  document.getElementById("navStudentName").textContent = `Signed in as ${currentStudent.name}`;
+  document.getElementById("navStudentName").textContent = currentStudent.name.split(" ")[0];
   document.getElementById("lookupEmail").value = currentStudent.email;
   lookupEnrollments();
 }
@@ -46,11 +48,30 @@ function unlockSite() {
 function switchAccount() {
   localStorage.removeItem(STORAGE_KEY);
   currentStudent = null;
+  closeProfileModal();
   document.getElementById("gateName").value = "";
   document.getElementById("gateEmail").value = "";
   document.getElementById("gateError").textContent = "";
   document.body.classList.add("gated");
 }
+
+/* ---------- Profile modal ---------- */
+
+function openProfileModal() {
+  if (!currentStudent) return;
+  document.getElementById("profileName").textContent = currentStudent.name;
+  document.getElementById("profileEmail").textContent = currentStudent.email;
+  document.getElementById("profileEnrollCount").textContent = lastEnrollmentCount;
+  profileModalOverlay.classList.add("show");
+}
+
+function closeProfileModal() {
+  profileModalOverlay.classList.remove("show");
+}
+
+profileModalOverlay.addEventListener("click", (e) => {
+  if (e.target === profileModalOverlay) closeProfileModal();
+});
 
 document.getElementById("gateForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -207,6 +228,7 @@ async function lookupEnrollments() {
   try {
     const res = await fetch(`/api/enrollments?email=${encodeURIComponent(email)}`);
     const data = await res.json();
+    lastEnrollmentCount = data.length;
     if (!data.length) {
       list.innerHTML = '<p class="empty-state">No enrollments found yet. Browse the catalog above to reserve a seat.</p>';
       return;

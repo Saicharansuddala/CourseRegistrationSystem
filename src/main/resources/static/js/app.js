@@ -1,10 +1,12 @@
 let courses = [];
 let activeCourseId = null;
+let currentStudent = null;
 
 const grid = document.getElementById("courseGrid");
 const toast = document.getElementById("toast");
 const modalOverlay = document.getElementById("modalOverlay");
 const modalCourseTitle = document.getElementById("modalCourseTitle");
+const STORAGE_KEY = "wildroot_student";
 
 window.addEventListener("scroll", () => {
   document.getElementById("siteNav").classList.toggle("scrolled", window.scrollY > 40);
@@ -17,6 +19,73 @@ function showToast(message, isError) {
   clearTimeout(toast._timer);
   toast._timer = setTimeout(() => toast.classList.remove("show"), 3200);
 }
+
+/* ---------- Registration gate ---------- */
+
+function loadStoredStudent() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function storeStudent(student) {
+  currentStudent = student;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(student));
+}
+
+function unlockSite() {
+  document.body.classList.remove("gated");
+  document.getElementById("navStudentName").textContent = `Signed in as ${currentStudent.name}`;
+  document.getElementById("lookupEmail").value = currentStudent.email;
+  lookupEnrollments();
+}
+
+function switchAccount() {
+  localStorage.removeItem(STORAGE_KEY);
+  currentStudent = null;
+  document.getElementById("gateName").value = "";
+  document.getElementById("gateEmail").value = "";
+  document.getElementById("gateError").textContent = "";
+  document.body.classList.add("gated");
+}
+
+document.getElementById("gateForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("gateName").value.trim();
+  const email = document.getElementById("gateEmail").value.trim();
+  const errorEl = document.getElementById("gateError");
+  errorEl.textContent = "";
+  if (!name || !email) return;
+
+  const submitBtn = e.target.querySelector(".gate-submit");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Registering…";
+
+  try {
+    const res = await fetch("/api/students/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errorEl.textContent = data.message || "Could not register. Please try again.";
+      return;
+    }
+    storeStudent(data);
+    unlockSite();
+  } catch (err) {
+    errorEl.textContent = "Network error. Please try again.";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Enter the academy";
+  }
+});
+
+/* ---------- Courses ---------- */
 
 async function loadCourses() {
   try {
@@ -72,13 +141,19 @@ function courseCardHtml(course) {
   `;
 }
 
+/* ---------- Enrollment modal ---------- */
+
 function openModal(courseId) {
+  if (!currentStudent) {
+    showToast("Please register first.", true);
+    return;
+  }
   const course = courses.find((c) => c.id === courseId);
   if (!course) return;
   activeCourseId = courseId;
   modalCourseTitle.textContent = `${course.code} — ${course.title}`;
-  document.getElementById("studentName").value = "";
-  document.getElementById("studentEmail").value = "";
+  document.getElementById("modalStudentName").textContent = currentStudent.name;
+  document.getElementById("modalStudentEmail").textContent = currentStudent.email;
   modalOverlay.classList.add("show");
 }
 
@@ -93,15 +168,17 @@ modalOverlay.addEventListener("click", (e) => {
 
 document.getElementById("enrollForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const studentName = document.getElementById("studentName").value.trim();
-  const studentEmail = document.getElementById("studentEmail").value.trim();
-  if (!activeCourseId || !studentName || !studentEmail) return;
+  if (!activeCourseId || !currentStudent) return;
 
   try {
     const res = await fetch("/api/enrollments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ studentName, studentEmail, courseId: activeCourseId }),
+      body: JSON.stringify({
+        studentName: currentStudent.name,
+        studentEmail: currentStudent.email,
+        courseId: activeCourseId,
+      }),
     });
     const data = await res.json();
     if (!res.ok) {
@@ -111,16 +188,19 @@ document.getElementById("enrollForm").addEventListener("submit", async (e) => {
     showToast(`You're enrolled in ${data.courseCode}!`);
     closeModal();
     await loadCourses();
+    lookupEnrollments();
   } catch (err) {
     showToast("Network error. Please try again.", true);
   }
 });
 
+/* ---------- My enrollments ---------- */
+
 async function lookupEnrollments() {
-  const email = document.getElementById("lookupEmail").value.trim();
+  const email = currentStudent ? currentStudent.email : document.getElementById("lookupEmail").value.trim();
   const list = document.getElementById("enrollmentList");
   if (!email) {
-    showToast("Enter an email to look up your schedule.", true);
+    list.innerHTML = '<p class="empty-state">Register to see your enrolled courses.</p>';
     return;
   }
   list.innerHTML = '<p class="empty-state">Searching…</p>';
@@ -128,7 +208,7 @@ async function lookupEnrollments() {
     const res = await fetch(`/api/enrollments?email=${encodeURIComponent(email)}`);
     const data = await res.json();
     if (!data.length) {
-      list.innerHTML = '<p class="empty-state">No enrollments found for that email yet.</p>';
+      list.innerHTML = '<p class="empty-state">No enrollments found yet. Browse the catalog above to reserve a seat.</p>';
       return;
     }
     list.innerHTML = data.map(enrollmentItemHtml).join("");
@@ -172,4 +252,14 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+/* ---------- Boot ---------- */
+
 loadCourses();
+
+const stored = loadStoredStudent();
+if (stored && stored.email && stored.name) {
+  currentStudent = stored;
+  unlockSite();
+} else {
+  document.getElementById("gateName").focus();
+}

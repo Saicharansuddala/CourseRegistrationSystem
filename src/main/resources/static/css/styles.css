@@ -50,6 +50,134 @@ img {
   padding: 0 24px;
 }
 
+/* Registration gate */
+body.gated {
+  overflow: hidden;
+}
+
+body.gated .site-nav,
+body.gated main,
+body.gated .hero,
+body.gated section,
+body.gated .site-footer {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(10, 26, 16, 0.72), rgba(10, 26, 16, 0.86)), url("/images/hero.jpg");
+  background-size: cover;
+  background-position: center 60%;
+}
+
+body.gated .gate-overlay {
+  display: flex;
+}
+
+.gate-card {
+  background: rgba(250, 247, 239, 0.98);
+  border-radius: 20px;
+  max-width: 440px;
+  width: 100%;
+  padding: 40px 36px;
+  box-shadow: var(--shadow);
+}
+
+.gate-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--leaf-500);
+  margin-bottom: 14px;
+}
+
+.gate-card h1 {
+  font-size: 1.7rem;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.gate-card p {
+  font-size: 0.95rem;
+  color: #5a5a4e;
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+
+.gate-card label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.gate-card input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid #d7d2bd;
+  font-size: 0.95rem;
+}
+
+.gate-submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.gate-error {
+  color: #c0533f;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 12px 0 0;
+  min-height: 1em;
+}
+
+/* Nav account */
+.nav-account {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+#navStudentName {
+  color: var(--cream-100);
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.nav-switch {
+  background: transparent;
+  border: 1px solid rgba(250, 247, 239, 0.45);
+  color: var(--cream-100);
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.nav-switch:hover {
+  border-color: var(--cream-50);
+}
+
+.modal-student {
+  font-size: 0.88rem;
+  color: #5a5a4e;
+  margin-bottom: 22px;
+}
+
 /* Nav */
 .site-nav {
   position: fixed;

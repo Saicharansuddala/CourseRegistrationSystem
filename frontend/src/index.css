@@ -51,15 +51,15 @@ img {
 }
 
 /* Registration gate */
-body.gated {
+.gated {
   overflow: hidden;
 }
 
-body.gated .site-nav,
-body.gated main,
-body.gated .hero,
-body.gated section,
-body.gated .site-footer {
+.gated .site-nav,
+.gated main,
+.gated .hero,
+.gated section,
+.gated .site-footer {
   filter: blur(6px);
   pointer-events: none;
   user-select: none;
@@ -78,7 +78,7 @@ body.gated .site-footer {
   background-position: center 60%;
 }
 
-body.gated .gate-overlay {
+.gated .gate-overlay {
   display: flex;
 }
 

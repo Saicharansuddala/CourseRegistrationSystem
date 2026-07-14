@@ -1,0 +1,1 @@
+- [Spring Data JPA lazy loading in REST controllers](spring-jpa-lazy-loading.md) — GET endpoints mapping @ManyToOne LAZY fields to a DTO throw 500s unless wrapped in @Transactional.

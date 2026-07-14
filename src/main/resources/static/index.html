@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wildroot Field Academy — Nature Course Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+
+  <nav class="site-nav" id="siteNav">
+    <div class="brand"><span class="brand-mark">🌿</span> Wildroot Field Academy</div>
+    <ul class="nav-links">
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#my-courses">My Enrollments</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Browse Courses</button>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-content">
+      <div class="hero-eyebrow">🌲 Field-based learning since the trailhead</div>
+      <h1>Learn where the wild things grow.</h1>
+      <p>Wildroot Field Academy runs hands-on nature courses in forests, reefs, deserts and night skies. Pick a trail, reserve your seat, and start your semester outdoors.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Explore Courses</button>
+        <button class="btn-secondary" onclick="document.getElementById('my-courses').scrollIntoView({behavior:'smooth'})">Check My Enrollments</button>
+      </div>
+      <div class="hero-stats">
+        <div><strong id="statCourses">10</strong><span>Field courses</span></div>
+        <div><strong id="statSeats">–</strong><span>Seats open now</span></div>
+        <div><strong>1:12</strong><span>Instructor ratio</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="courses" id="courses">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Course Catalog</span>
+        <h2>Ten trails, ten ecosystems</h2>
+        <p>Every course pairs a field site with a working scientist. Seats are limited so each cohort keeps its footprint small.</p>
+      </div>
+      <div class="course-grid" id="courseGrid">
+        <p class="empty-state">Loading courses…</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="trail" id="about">
+    <div class="container">
+      <div class="trail-media">
+        <img src="/images/rainforest.jpg" alt="Waterfall in a lush rainforest" />
+      </div>
+      <div class="trail-copy">
+        <span class="section-eyebrow">Why Wildroot</span>
+        <h2>Small cohorts, real field sites, no lecture halls.</h2>
+        <p>We built Wildroot around a simple idea: ecology is best learned outdoors. Every course listed here runs at an active field station, farm, reef, or observatory — not a classroom.</p>
+        <ul class="trail-list">
+          <li>Every instructor is an active field researcher in their subject.</li>
+          <li>Class sizes are capped so every student gets hands-on time.</li>
+          <li>Enroll instantly online — no waitlist forms, no office hours required.</li>
+          <li>Credits transfer to most environmental science and biology programs.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="my-courses" id="my-courses">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Your Schedule</span>
+        <h2>Look up your enrollments</h2>
+        <p>Enter the email you used when enrolling to see your current course schedule.</p>
+      </div>
+      <div class="lookup-row">
+        <input type="email" id="lookupEmail" placeholder="you@example.com" />
+        <button onclick="lookupEnrollments()">View schedule</button>
+      </div>
+      <div class="enrollment-list" id="enrollmentList">
+        <p class="empty-state">Enter your email above to see your enrolled courses.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="brand"><span class="brand-mark">🌿</span> Wildroot Field Academy</div>
+          <p>A field-first course registration system for students who'd rather learn under a canopy than fluorescent lights.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 Wildroot Field Academy. All trails lead outside.</div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3>Reserve your seat</h3>
+      <span class="modal-course" id="modalCourseTitle"></span>
+      <form id="enrollForm">
+        <label for="studentName">Full name</label>
+        <input type="text" id="studentName" required placeholder="Jordan Rivers" />
+        <label for="studentEmail">Email</label>
+        <input type="email" id="studentEmail" required placeholder="you@example.com" />
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="modal-submit">Confirm enrollment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

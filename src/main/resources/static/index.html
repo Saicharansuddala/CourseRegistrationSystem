@@ -29,10 +29,11 @@
 
   <nav class="site-nav" id="siteNav">
     <div class="brand"><span class="brand-mark">🌿</span> Wildroot Field Academy</div>
-    <ul class="nav-links">
-      <li><a href="#courses">Courses</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#my-courses">My Enrollments</a></li>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#courses" onclick="closeMobileMenu()">Courses</a></li>
+      <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+      <li><a href="#my-courses" onclick="closeMobileMenu()">My Enrollments</a></li>
+      <li class="nav-links-mobile-only"><button class="nav-profile" onclick="openProfileModal(); closeMobileMenu()"><span class="nav-profile-avatar">👤</span><span id="navStudentNameMobile"></span></button></li>
     </ul>
     <div class="nav-account">
       <button class="nav-profile" id="navProfile" onclick="openProfileModal()">
@@ -40,6 +41,9 @@
         <span id="navStudentName"></span>
       </button>
       <button class="nav-cta" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Browse Courses</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 

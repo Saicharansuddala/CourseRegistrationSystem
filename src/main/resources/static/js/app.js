@@ -14,6 +14,14 @@ window.addEventListener("scroll", () => {
   document.getElementById("siteNav").classList.toggle("scrolled", window.scrollY > 40);
 });
 
+function toggleMobileMenu() {
+  document.getElementById("navLinks").classList.toggle("open");
+}
+
+function closeMobileMenu() {
+  document.getElementById("navLinks").classList.remove("open");
+}
+
 function showToast(message, isError) {
   toast.textContent = message;
   toast.classList.toggle("error", !!isError);
@@ -40,7 +48,9 @@ function storeStudent(student) {
 
 function unlockSite() {
   document.body.classList.remove("gated");
-  document.getElementById("navStudentName").textContent = currentStudent.name.split(" ")[0];
+  const firstName = currentStudent.name.split(" ")[0];
+  document.getElementById("navStudentName").textContent = firstName;
+  document.getElementById("navStudentNameMobile").textContent = firstName;
   document.getElementById("lookupEmail").value = currentStudent.email;
   lookupEnrollments();
 }

@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: course-registration-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health

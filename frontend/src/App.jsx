@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './index.css';
 
 const STORAGE_KEY = "wildroot_student";
+const API = import.meta.env.VITE_API_URL ?? '';
 
 function App() {
   const [courses, setCourses] = useState([]);
@@ -53,7 +54,7 @@ function App() {
 
   const loadCourses = async () => {
     try {
-      const res = await fetch("/api/courses");
+      const res = await fetch(`${API}/api/courses`);
       if (!res.ok) throw new Error("Failed to load courses");
       const data = await res.json();
       setCourses(data);
@@ -69,7 +70,7 @@ function App() {
     setIsRegistering(true);
 
     try {
-      const res = await fetch("/api/students/register", {
+      const res = await fetch(`${API}/api/students/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: gateName, email: gateEmail }),
@@ -103,7 +104,7 @@ function App() {
     if (!emailToLookup) return;
     setIsEnrollListLoading(true);
     try {
-      const res = await fetch(`/api/enrollments?email=${encodeURIComponent(emailToLookup)}`);
+      const res = await fetch(`${API}/api/enrollments?email=${encodeURIComponent(emailToLookup)}`);
       const data = await res.json();
       setEnrollments(data);
     } catch (err) {
@@ -116,7 +117,7 @@ function App() {
   const dropEnrollment = async (id) => {
     if (!window.confirm("Drop this course?")) return;
     try {
-      const res = await fetch(`/api/enrollments/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API}/api/enrollments/${id}`, { method: "DELETE" });
       if (!res.ok) {
         showToast("Could not drop the course.", true);
         return;
@@ -134,7 +135,7 @@ function App() {
     if (!activeCourseId || !currentStudent) return;
 
     try {
-      const res = await fetch("/api/enrollments", {
+      const res = await fetch(`${API}/api/enrollments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
